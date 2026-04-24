@@ -16,6 +16,7 @@ function fmt(n) { return '$' + Math.round(n).toLocaleString('es-AR'); }
 // ── PRODUCTOS ────────────────────────────────────────────────
 // Productos de ejemplo hasta que se conecte Supabase
 const DEMO_PRODUCTS = [
+  { id: 12, nombre: 'Pack Mate + Bombilla', categoria: 'mate', precio: 5800, icono: '🧉', descripcion: 'Combo perfecto para regalar.', badge: 'Pack', stock: 4, grabable: true, activo: true },
   { id: 1, nombre: 'Mate Clásico de Madera', categoria: 'mate', precio: 4500, icono: '🧉', descripcion: 'Mate torneado artesanal, acabado natural.', badge: 'Más vendido', stock: 8, grabable: true, activo: true },
   { id: 2, nombre: 'Mate Calabaza Curada', categoria: 'mate', precio: 3800, icono: '🧉', descripcion: 'Calabaza 100% natural curada a mano.', badge: null, stock: 5, grabable: true, activo: true },
   { id: 3, nombre: 'Mate de Cerámica', categoria: 'mate', precio: 5200, icono: '🏺', descripcion: 'Cerámica artesanal pintada a mano.', badge: 'Nuevo', stock: 6, grabable: false, activo: true },
@@ -27,8 +28,7 @@ const DEMO_PRODUCTS = [
  
   { id: 10, nombre: 'Grabado en Mate', categoria: 'grabado', precio: 1500, icono: '✦', descripcion: 'Grabado a láser. Subí tu imagen o texto.', badge: 'Personal.', stock: 99, grabable: true, activo: true },
   { id: 11, nombre: 'Grabado en Termo', categoria: 'grabado', precio: 2000, icono: '✦', descripcion: 'Logo o diseño personalizado a láser.', badge: 'Personal.', stock: 99, grabable: true, activo: true },
-  { id: 12, nombre: 'Pack Mate + Bombilla', categoria: 'mate', precio: 5800, icono: '🧉', descripcion: 'Combo perfecto para regalar.', badge: 'Pack', stock: 4, grabable: true, activo: true },
-];
+  
 
 async function loadProducts() {
   if (supabase) {
