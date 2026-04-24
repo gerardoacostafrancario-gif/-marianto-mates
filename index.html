@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marianto Mates — Mates, Termos y Bombillas</title>
+<meta name="description" content="Mates, bombillas, termos y gorras con identidad propia. Grabados personalizados a láser. Envío gratis a todo el país.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- NAV -->
+<header class="nav" id="navbar">
+  <button class="menu-btn" onclick="toggleSB()" aria-label="Abrir menú">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    MENÚ
+  </button>
+  <div class="nav-logo">
+    <img src="img/logo.png" alt="Marianto Mates" onerror="this.style.display='none';document.getElementById('nl').style.display='block'">
+    <div id="nl" style="display:none" class="nav-logo-text">MARIANTO <span style="color:var(--olive)">MATES</span></div>
+  </div>
+  <div class="nav-right">
+    <button class="user-nav-btn" onclick="handleUserBtn()" id="nav-user-btn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span id="nav-user-label">Ingresar</span>
+    </button>
+    <button class="cart-nav-btn" onclick="toggleCart()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      <span class="cart-nav-label">Carrito</span>
+      <div class="cart-badge" id="cbadge" style="display:none">0</div>
+    </button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div class="ov" id="sb-ov" onclick="toggleSB()"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="sb-head">
+    <img src="img/logo.png" alt="Marianto" onerror="this.style.display='none'">
+    <button class="close-x" onclick="toggleSB()">✕</button>
+  </div>
+  <ul class="sb-nav">
+    <li><a href="#" onclick="filt('todos');toggleSB()"><span class="ik">🛍️</span>Todos los productos</a></li>
+    <li><a href="#" onclick="filt('mate');toggleSB()"><span class="ik">🧉</span>Mates</a></li>
+    <li><a href="#" onclick="filt('bombilla');toggleSB()"><span class="ik">🥢</span>Bombillas</a></li>
+    <li><a href="#" onclick="filt('termo');toggleSB()"><span class="ik">🫙</span>Termos</a></li>
+    <li><a href="#" onclick="filt('gorra');toggleSB()"><span class="ik">🧢</span>Gorras</a></li>
+    <li><a href="#" onclick="filt('grabado');toggleSB()"><span class="ik">✦</span>Grabados personalizados</a></li>
+  </ul>
+  <div class="sb-foot">
+    Seguinos en Instagram<br>
+    <a href="https://instagram.com/mariantomates" target="_blank">@mariantomates</a>
+  </div>
+</aside>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-pattern"></div>
+  <div class="hero-content">
+    <img class="hero-logo" src="img/logo.png" alt="Marianto Mates" onerror="this.style.display='none'">
+    <h1 class="ht">Mates, termos y bombillas<br><em>con identidad propia</em></h1>
+    <p class="hs">Productos de calidad, grabados personalizados y diseños únicos.<br>Envío gratis · Compra segura con Mercado Pago.</p>
+    <div class="hero-ctas">
+      <button class="btn-p" onclick="scrollProd()">Ver productos</button>
+      <button class="btn-o" onclick="filt('grabado');scrollProd()">✦ Personalizá el tuyo</button>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTOS -->
+<section class="sec" id="prod-sec">
+  <p class="sl">Catálogo</p>
+  <h2 class="st">Encontrá lo que buscás</h2>
+  <div class="divider"></div>
+  <div class="ftab" id="ftab">
+    <button class="on" onclick="filt('todos',this)">Todos</button>
+    <button onclick="filt('mate',this)">🧉 Mates</button>
+    <button onclick="filt('bombilla',this)">🥢 Bombillas</button>
+    <button onclick="filt('termo',this)">🫙 Termos</button>
+    <button onclick="filt('gorra',this)">🧢 Gorras</button>
+    <button onclick="filt('grabado',this)">✦ Grabados</button>
+  </div>
+  <div class="pgrid" id="pgrid">
+    <div class="loading-products">Cargando productos...</div>
+  </div>
+</section>
+
+<!-- GRABADO BANNER -->
+<section class="sec" style="padding-top:0">
+  <div class="gbanner">
+    <div class="gbanner-icon">✦</div>
+    <div>
+      <h3>¿Querés grabado personalizado?</h3>
+      <p>Personalizá tu mate, termo o bombilla con el diseño que quieras. Subí tu imagen o logo y nosotros hacemos el grabado a láser. Lo podés agregar en cualquier producto al momento de la compra.</p>
+      <button class="btn-p" style="margin-top:1rem" onclick="filt('grabado');scrollProd()">Ver opciones de grabado</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <img src="img/logo.png" alt="Marianto" onerror="this.style.display='none'" style="height:50px;margin-bottom:1rem;opacity:.7">
+  <p>Seguinos en <a href="https://instagram.com/mariantomates" target="_blank">@mariantomates</a></p>
+  <p>Envío gratis · Compra segura con Mercado Pago</p>
+  <p>© 2026 Marianto Mates</p>
+</footer>
+
+<!-- CART DRAWER -->
+<div class="cdov" id="cd-ov" onclick="toggleCart()"></div>
+<div class="cdrawer" id="cdrawer">
+  <div class="cd-head">
+    <h3>Tu carrito</h3>
+    <button class="close-x" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cd-items" id="cd-items"></div>
+  <div class="cd-foot">
+    <div class="cd-total"><span>Total</span><strong id="cd-total">$0</strong></div>
+    <button class="btn-p" style="width:100%;padding:15px" onclick="goCheckout()">Finalizar compra →</button>
+  </div>
+</div>
+
+<!-- MODAL AUTH -->
+<div class="mwrap" id="auth-modal">
+  <div class="modal" style="max-width:420px">
+    <div class="tab-row">
+      <button class="tab-btn on" id="tab-login" onclick="switchTab('login')">Iniciar sesión</button>
+      <button class="tab-btn" id="tab-reg" onclick="switchTab('reg')">Crear cuenta</button>
+    </div>
+    <div id="auth-login">
+      <div class="fg"><label>Email</label><input type="email" id="l-email" placeholder="tu@email.com"></div>
+      <div class="fg"><label>Contraseña</label><input type="password" id="l-pass" placeholder="••••••••"></div>
+      <div class="err" id="l-err" style="display:none"></div>
+      <button class="btn-p" style="width:100%;padding:13px;margin-top:.5rem" onclick="doLogin()">Ingresar</button>
+      <p style="font-size:12px;color:var(--muted);text-align:center;margin-top:.75rem">¿No tenés cuenta? <a href="#" onclick="switchTab('reg')">Registrate gratis</a></p>
+    </div>
+    <div id="auth-reg" class="hidden">
+      <div class="fg-row">
+        <div class="fg"><label>Nombre</label><input type="text" id="r-nombre" placeholder="Nombre"></div>
+        <div class="fg"><label>Apellido</label><input type="text" id="r-apellido" placeholder="Apellido"></div>
+      </div>
+      <div class="fg"><label>Email</label><input type="email" id="r-email" placeholder="tu@email.com"></div>
+      <div class="fg"><label>WhatsApp <span style="color:#f09595">*</span></label><input type="tel" id="r-wa" placeholder="+54 9 381 ..."></div>
+      <div class="fg"><label>Contraseña</label><input type="password" id="r-pass" placeholder="Mínimo 8 caracteres"></div>
+      <div class="fg"><label>Dirección de envío <span style="color:#f09595">*</span></label><input type="text" id="r-dir" placeholder="Calle, número, ciudad..."></div>
+      <div class="err" id="r-err" style="display:none"></div>
+      <button class="btn-p" style="width:100%;padding:13px;margin-top:.5rem" onclick="doRegister()">Crear cuenta</button>
+      <p style="font-size:12px;color:var(--muted);text-align:center;margin-top:.75rem">¿Ya tenés cuenta? <a href="#" onclick="switchTab('login')">Iniciá sesión</a></p>
+    </div>
+    <button class="btn-o" style="width:100%;margin-top:.75rem;padding:10px" onclick="closeModal('auth-modal')">Cancelar</button>
+  </div>
+</div>
+
+<!-- MODAL CHECKOUT -->
+<div class="mwrap" id="checkout-modal">
+  <div class="modal">
+    <!-- STEPS BAR -->
+    <div class="steps" id="steps-bar">
+      <div class="step-dot"><div class="sd-circle active" id="s1c">1</div><span class="sd-label active" id="s1l">Mis datos</span></div>
+      <div class="step-line" id="sl1"></div>
+      <div class="step-dot"><div class="sd-circle" id="s2c">2</div><span class="sd-label" id="s2l">Grabado</span></div>
+      <div class="step-line" id="sl2"></div>
+      <div class="step-dot"><div class="sd-circle" id="s3c">3</div><span class="sd-label" id="s3l">Revisión</span></div>
+      <div class="step-line" id="sl3"></div>
+      <div class="step-dot"><div class="sd-circle" id="s4c">4</div><span class="sd-label" id="s4l">Pago</span></div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div id="step1">
+      <h3 class="mh">Tus datos de envío</h3>
+      <p class="msub">Revisá y completá tus datos.</p>
+      <div class="fg-row">
+        <div class="fg"><label>Nombre</label><input type="text" id="c-nombre" placeholder="Nombre"></div>
+        <div class="fg"><label>Apellido</label><input type="text" id="c-apellido" placeholder="Apellido"></div>
+      </div>
+      <div class="fg"><label>WhatsApp <span style="color:#f09595">*</span></label><input type="tel" id="c-wa" placeholder="+54 9 381 555 1234"></div>
+      <div class="fg"><label>Email</label><input type="email" id="c-email" placeholder="tu@email.com"></div>
+      <div class="fg"><label>Dirección completa <span style="color:#f09595">*</span></label><input type="text" id="c-dir" placeholder="Calle, número, piso, ciudad..."></div>
+      <div class="err" id="s1-err" style="display:none"></div>
+      <div class="mactions">
+        <button class="btn-o" onclick="closeModal('checkout-modal')">Cancelar</button>
+        <button class="btn-p" onclick="goStep(2)">Continuar →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div id="step2" class="hidden">
+      <h3 class="mh">¿Querés grabado personalizado?</h3>
+      <p class="msub">Opcional. Se puede agregar a mates, termos y bombillas.</p>
+      <div class="engr-box">
+        <div class="etoggle" onclick="toggleEngr()">
+          <div class="eswitch" id="eswitch"></div>
+          <div>
+            <p style="font-size:14px;color:var(--cream)">✦ Agregar grabado personalizado</p>
+            <p style="font-size:11px;color:var(--muted)">Coordinamos el costo por WhatsApp</p>
+          </div>
+        </div>
+        <div class="eopts" id="eopts">
+          <div class="fg" style="margin-top:1rem">
+            <label>¿En qué producto?</label>
+            <select id="e-prod">
+              <option value="">Seleccioná...</option>
+              <option>Mate del pedido</option>
+              <option>Termo del pedido</option>
+              <option>Bombilla del pedido</option>
+            </select>
+          </div>
+          <div class="fg"><label>Texto (opcional)</label><input type="text" id="e-texto" placeholder="Nombre, frase, fecha..."></div>
+          <label class="upload-label">Subí tu imagen/logo</label>
+          <div class="upload-area" id="uarea" onclick="document.getElementById('ufile').click()" ondrop="doDrop(event)" ondragover="doDragOv(event)" ondragleave="doDragLv(event)">
+            <input type="file" id="ufile" accept="image/*" style="display:none" onchange="doFile(event)">
+            <div style="font-size:2rem;margin-bottom:.4rem">📁</div>
+            <p style="font-size:13px;color:var(--muted)"><strong style="color:var(--olive-light)">Tocá para subir</strong> o arrastrá</p>
+            <p style="font-size:11px;color:var(--muted);margin-top:.2rem">PNG, JPG, SVG · máx 5MB</p>
+          </div>
+          <div id="upreview"></div>
+        </div>
+      </div>
+      <div class="fg"><label>Notas adicionales</label><textarea id="c-notas" placeholder="Cualquier aclaración..."></textarea></div>
+      <div class="mactions">
+        <button class="btn-o" onclick="goStep(1)">← Atrás</button>
+        <button class="btn-p" onclick="goStep(3)">Continuar →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div id="step3" class="hidden">
+      <h3 class="mh">Revisá tu pedido</h3>
+      <p class="msub">Confirmá los detalles antes de pagar.</p>
+      <div class="os-label">Productos</div>
+      <div class="order-summary" id="review-items"></div>
+      <div class="os-label" style="margin-top:1rem">Envío a</div>
+      <div class="order-summary" id="review-addr"></div>
+      <div id="review-engr-wrap" class="hidden">
+        <div class="os-label" style="margin-top:1rem">Grabado</div>
+        <div class="order-summary" id="review-engr"></div>
+      </div>
+      <div class="mactions">
+        <button class="btn-o" onclick="goStep(2)">← Atrás</button>
+        <button class="btn-p" onclick="goStep(4)">Ir a pagar →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: MERCADO PAGO -->
+    <div id="step4" class="hidden">
+      <div class="mp-screen">
+        <div class="mp-logo">mercado pago</div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:.5rem">Total a pagar</p>
+        <div class="mp-amount" id="mp-amount">$0</div>
+        <p class="mp-desc">Marianto Mates — Pedido #<span id="mp-order-num"></span></p>
+        <div id="mp-method-section">
+          <p style="font-size:12px;color:var(--muted);margin-bottom:.75rem;text-align:left">Elegí cómo pagar:</p>
+          <div class="mp-methods">
+            <div class="mp-method" onclick="selMP(this)"><div class="mp-method-icon">💳</div><div><p class="mp-method-label">Tarjeta</p><p class="mp-method-sub">Créd / Déb</p></div></div>
+            <div class="mp-method" onclick="selMP(this)"><div class="mp-method-icon">🏦</div><div><p class="mp-method-label">Transferencia</p><p class="mp-method-sub">Alias / CBU</p></div></div>
+            <div class="mp-method" onclick="selMP(this)"><div class="mp-method-icon">📱</div><div><p class="mp-method-label">QR / App</p><p class="mp-method-sub">Billetera MP</p></div></div>
+            <div class="mp-method" onclick="selMP(this)"><div class="mp-method-icon">🏪</div><div><p class="mp-method-label">Efectivo</p><p class="mp-method-sub">Rapipago / PB</p></div></div>
+          </div>
+          <button class="btn-p" style="width:100%;padding:14px" onclick="simMP()">Pagar ahora</button>
+          <p class="mp-security">🔒 Pago 100% seguro con Mercado Pago</p>
+        </div>
+        <div id="mp-processing" class="hidden">
+          <p style="font-size:14px;color:var(--cream);margin-bottom:1rem">Procesando tu pago...</p>
+          <div class="mp-bar"><div class="mp-progress" id="mp-prog"></div></div>
+          <p style="font-size:12px;color:var(--muted)">No cerrés esta ventana</p>
+        </div>
+      </div>
+      <div class="mactions" style="margin-top:1rem">
+        <button class="btn-o" onclick="goStep(3)">← Atrás</button>
+      </div>
+    </div>
+
+    <!-- STEP 5: ÉXITO -->
+    <div id="step5" class="hidden">
+      <div class="success-screen">
+        <span class="checkmark">✅</span>
+        <div class="order-code" id="s-order-num">PEDIDO #0000</div>
+        <h3>¡Pago confirmado!</h3>
+        <p>Tu compra fue procesada con éxito.<br>Te vamos a contactar por WhatsApp para coordinar el envío.</p>
+        <div class="wa-btns">
+          <button class="wa-btn" id="btn-admin" onclick="sendWAAdmin()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Notificar a la tienda
+          </button>
+          <button class="wa-btn wa-btn-client" id="btn-client" onclick="sendWAClient()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Mi comprobante
+          </button>
+        </div>
+        <button class="btn-o" style="margin-top:1rem;padding:10px 24px" onclick="closeModal('checkout-modal');resetCheckout()">Volver a la tienda</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- IG FLOAT -->
+<a href="https://instagram.com/mariantomates" target="_blank" class="igfloat">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+  @mariantomates
+</a>
+
+<script src="js/config.js"></script>
+<script src="js/supabase.js"></script>
+<script src="js/store.js"></script>
+</body>
+</html>
