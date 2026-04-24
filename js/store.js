@@ -14,9 +14,9 @@ let orderNum = null;
 function fmt(n) { return '$' + Math.round(n).toLocaleString('es-AR'); }
 
 // ── PRODUCTOS ────────────────────────────────────────────────
-// Productos de ejemplo hasta que se conecte Supabase
 const DEMO_PRODUCTS = [
   { id: 12, nombre: 'Pack Mate + Bombilla', categoria: 'mate', precio: 5800, icono: '🧉', descripcion: 'Combo perfecto para regalar.', badge: 'Pack', stock: 4, grabable: true, activo: true },
+  { id: 8, nombre: 'Gorra Marianto Classic', categoria: 'varios', precio: 6500, icono: '🧢', descripcion: 'Bordado del logo. Algodón, ajuste metálico.', badge: 'Nuevo', stock: 10, grabable: false, activo: true },
   { id: 1, nombre: 'Mate Clásico de Madera', categoria: 'mate', precio: 4500, icono: '🧉', descripcion: 'Mate torneado artesanal, acabado natural.', badge: 'Más vendido', stock: 8, grabable: true, activo: true },
   { id: 2, nombre: 'Mate Calabaza Curada', categoria: 'mate', precio: 3800, icono: '🧉', descripcion: 'Calabaza 100% natural curada a mano.', badge: null, stock: 5, grabable: true, activo: true },
   { id: 3, nombre: 'Mate de Cerámica', categoria: 'mate', precio: 5200, icono: '🏺', descripcion: 'Cerámica artesanal pintada a mano.', badge: 'Nuevo', stock: 6, grabable: false, activo: true },
@@ -24,14 +24,12 @@ const DEMO_PRODUCTS = [
   { id: 5, nombre: 'Bombilla Acero Inox', categoria: 'bombilla', precio: 2200, icono: '🥢', descripcion: 'Inoxidable, punta espiral antitaponamiento.', badge: 'Recomendada', stock: 12, grabable: false, activo: true },
   { id: 6, nombre: 'Termo Stanley 1L', categoria: 'termo', precio: 18500, icono: '🫙', descripcion: '24hs de temperatura. Negro mate.', badge: null, stock: 3, grabable: true, activo: true },
   { id: 7, nombre: 'Termo Cebador 500ml', categoria: 'termo', precio: 12000, icono: '🫙', descripcion: 'Tapa antigoteo, ideal para el día a día.', badge: 'Nuevo', stock: 7, grabable: true, activo: true },
-  { id: 8, nombre: 'Gorra Marianto Classic', categoria: 'varios', precio: 6500, icono: '🧢', descripcion: 'Bordado del logo. Algodón, ajuste metálico.', badge: 'Nuevo', stock: 10, grabable: false, activo: true },
- 
   { id: 10, nombre: 'Grabado en Mate', categoria: 'grabado', precio: 1500, icono: '✦', descripcion: 'Grabado a láser. Subí tu imagen o texto.', badge: 'Personal.', stock: 99, grabable: true, activo: true },
   { id: 11, nombre: 'Grabado en Termo', categoria: 'grabado', precio: 2000, icono: '✦', descripcion: 'Logo o diseño personalizado a láser.', badge: 'Personal.', stock: 99, grabable: true, activo: true },
-  
+];
 
 async function loadProducts() {
-  if (supabase) {
+  if (typeof supabase !== 'undefined' && supabase) {
     const { data, error } = await supabase
       .from('productos')
       .select('*')
@@ -92,7 +90,6 @@ function addCart(id) {
   if (ex) ex.qty++;
   else cart.push({ ...p, qty: 1 });
   updCart();
-  // Abrir carrito automáticamente
   if (!document.getElementById('cdrawer').classList.contains('open')) toggleCart();
 }
 
@@ -110,7 +107,7 @@ function rmCart(id) {
 }
 
 function calcTotal() {
-  return cart.reduce((s, i) => s + (i.precio || i.price || 0) * i.qty, 0);
+  return cart.reduce((s, i) => s + (i.precio || 0) * i.qty, 0);
 }
 
 function updCart() {
@@ -133,7 +130,7 @@ function updCart() {
       </div>
       <div class="ci-info">
         <p class="ci-name">${item.nombre}</p>
-        <p class="ci-price">${fmt((item.precio || item.price || 0) * item.qty)}</p>
+        <p class="ci-price">${fmt((item.precio || 0) * item.qty)}</p>
         <div class="ci-qty">
           <button class="qty-btn" onclick="chQty(${item.id},-1)">−</button>
           <span class="qty-val">${item.qty}</span>
@@ -149,7 +146,7 @@ function updCart() {
 function goCheckout() {
   if (!cart.length) { alert('Agregá productos al carrito primero'); return; }
   if (document.getElementById('cdrawer').classList.contains('open')) toggleCart();
-  if (!currentUser) { openModal('auth-modal'); return; }
+  if (typeof currentUser === 'undefined' || !currentUser) { openModal('auth-modal'); return; }
   prefillCheckout();
   curStep = 1;
   showStep(1);
@@ -203,7 +200,7 @@ function buildReview() {
   let rows = cart.map(i => `
     <div class="os-item">
       <span>${i.nombre} x${i.qty}</span>
-      <span>${fmt((i.precio || i.price || 0) * i.qty)}</span>
+      <span>${fmt((i.precio || 0) * i.qty)}</span>
     </div>`).join('');
   rows += `<div class="os-item os-total"><span>Total</span><span>${fmt(calcTotal())}</span></div>`;
   document.getElementById('review-items').innerHTML = rows;
@@ -256,17 +253,17 @@ function simMP() {
     if (w >= 100) {
       clearInterval(iv);
       setTimeout(async () => {
-        // Guardar pedido en Supabase
-        await savePedido({
-          numero: orderNum,
-          items: cart,
-          total: calcTotal(),
-          direccion: document.getElementById('c-dir').value,
-          whatsapp: document.getElementById('c-wa').value,
-          grabado: engrOn,
-        });
+        if (typeof savePedido !== 'undefined') {
+          await savePedido({
+            numero: orderNum,
+            items: cart,
+            total: calcTotal(),
+            direccion: document.getElementById('c-dir').value,
+            whatsapp: document.getElementById('c-wa').value,
+            grabado: engrOn,
+          });
+        }
         goStep(5);
-        // Enviar WhatsApp automáticamente
         setTimeout(() => { sendWAAdmin(); sendWAClient(); }, 1500);
       }, 400);
     }
@@ -279,10 +276,11 @@ function sendWAAdmin() {
   const apellido = document.getElementById('c-apellido').value;
   const wa = document.getElementById('c-wa').value;
   const dir = document.getElementById('c-dir').value;
-  const items = cart.map(i => `- ${i.nombre} x${i.qty}: ${fmt((i.precio || i.price || 0) * i.qty)}`).join('\n');
+  const items = cart.map(i => `- ${i.nombre} x${i.qty}: ${fmt((i.precio || 0) * i.qty)}`).join('\n');
   const grabado = engrOn ? `\n✦ Grabado en: ${document.getElementById('e-prod').value}${document.getElementById('e-texto').value ? ' — "' + document.getElementById('e-texto').value + '"' : ''}` : '';
+  const waAdmin = typeof CONFIG !== 'undefined' ? CONFIG.WA_ADMIN : '5493856000000';
   const msg = `🛍️ *NUEVO PEDIDO #${orderNum} — MARIANTO MATES*\n\n👤 *Cliente:* ${nombre} ${apellido}\n📱 *WhatsApp:* ${wa}\n📍 *Dirección:* ${dir}\n\n📦 *Productos:*\n${items}${grabado}\n\n💰 *Total pagado:* ${fmt(calcTotal())}\n✅ *Pago:* Mercado Pago confirmado\n\n⚡ Coordinar envío.`;
-  window.open('https://wa.me/' + CONFIG.WA_ADMIN + '?text=' + encodeURIComponent(msg), '_blank');
+  window.open('https://wa.me/' + waAdmin + '?text=' + encodeURIComponent(msg), '_blank');
   const btn = document.getElementById('btn-admin');
   if (btn) { btn.innerHTML = '✓ Enviado'; btn.style.opacity = '.6'; btn.disabled = true; }
 }
@@ -291,8 +289,9 @@ function sendWAClient() {
   const wa = document.getElementById('c-wa').value.replace(/\D/g, '');
   const nombre = document.getElementById('c-nombre').value;
   const dir = document.getElementById('c-dir').value;
-  const items = cart.map(i => `- ${i.nombre} x${i.qty}: ${fmt((i.precio || i.price || 0) * i.qty)}`).join('\n');
-  const msg = `🧉 *${CONFIG.NEGOCIO_NOMBRE}*\n\n¡Hola ${nombre}! Gracias por tu compra 🙌\n\n📋 *Comprobante — Pedido #${orderNum}*\n\n📦 *Tu pedido:*\n${items}\n\n💰 *Total abonado:* ${fmt(calcTotal())}\n✅ *Pago:* Mercado Pago\n📍 *Envío a:* ${dir}\n\nTe contactamos a la brevedad para coordinar el envío 🚚\n\n¡Cualquier consulta respondemos acá!`;
+  const items = cart.map(i => `- ${i.nombre} x${i.qty}: ${fmt((i.precio || 0) * i.qty)}`).join('\n');
+  const negocio = typeof CONFIG !== 'undefined' ? CONFIG.NEGOCIO_NOMBRE : 'Marianto Mates';
+  const msg = `🧉 *${negocio}*\n\n¡Hola ${nombre}! Gracias por tu compra 🙌\n\n📋 *Comprobante — Pedido #${orderNum}*\n\n📦 *Tu pedido:*\n${items}\n\n💰 *Total abonado:* ${fmt(calcTotal())}\n✅ *Pago:* Mercado Pago\n📍 *Envío a:* ${dir}\n\nTe contactamos a la brevedad para coordinar el envío 🚚`;
   if (wa) window.open('https://wa.me/' + wa + '?text=' + encodeURIComponent(msg), '_blank');
   const btn = document.getElementById('btn-client');
   if (btn) { btn.innerHTML = '✓ Enviado'; btn.style.opacity = '.6'; btn.disabled = true; }
